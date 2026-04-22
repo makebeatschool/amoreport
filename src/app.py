@@ -3,6 +3,7 @@ import time
 import requests
 from datetime import datetime
 from data import TELEMARKETERS, MANAGERS
+# from exelWork import build_report_excel, send_telegram_file, format_manager_report_exel, format_telemarketer_report_exel, BASE_DATA, os
 from config import headers, TELEGRAM_BOT_TOKEN, TELEGRAM_DOMEN, TELEGRAM_CHAT_ID
 from tokenWork import refresh_token, load_token
 from formating import format_manager_report, format_telemarketer_report
@@ -146,6 +147,23 @@ def send_report(date_from, date_to, date_range, employers, calul_func, format_fu
         else: failed += 1
         time.sleep(1)
     return sent, failed
+def send_telegram_text(date_from, date_to, date_range):
+    print(f"\n{'='*60}")
+    print(f"📊 ОТЧЁТ ЗА {date_range}")
+    print(f"📨 Отправка в Telegram...")
+    print(f"{'='*60}\n")
+    print("👔 МЕНЕДЖЕРЫ:")
+    # send_manager_report(date_from, date_to, date_range)
+    sent, failed =send_report(date_from, date_to, date_range, MANAGERS, 
+                calculate_stats_for_manager, format_manager_report, 0, 0)
+    print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
+    sent, failed =send_report(date_from, date_to, date_range, TELEMARKETERS, 
+                calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
+    # send_telemarketolog_report(date_from, date_to, date_range)
+    print(f"\n{'='*60}")
+    print(f"✅ Отправлено: {sent}")
+    print(f"❌ Не отправлено: {failed}")
+    print(f"{'='*60}\n")
 
 def main():
     args = sys.argv[1:]
@@ -155,24 +173,8 @@ def main():
         print(e)
         return
     date_range = f"{date_from} - {date_to}" if date_from != date_to else date_from
-    print(f"\n{'='*60}")
-    print(f"📊 ОТЧЁТ ЗА {date_range}")
-    print(f"📨 Отправка в Telegram...")
-    print(f"{'='*60}\n")
-
-    print("👔 МЕНЕДЖЕРЫ:")
-    # send_manager_report(date_from, date_to, date_range)
-    sent,failed=send_report(date_from, date_to, date_range, MANAGERS, 
-                calculate_stats_for_manager, format_manager_report, 0, 0)
-    print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
-    sent, failed=send_report(date_from, date_to, date_range, TELEMARKETERS, 
-                calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
-    # send_telemarketolog_report(date_from, date_to, date_range)
-
-    print(f"\n{'='*60}")
-    print(f"✅ Отправлено: {sent}")
-    print(f"❌ Не отправлено: {failed}")
-    print(f"{'='*60}\n")
+    send_telegram_text(date_from, date_to, date_range)
+    # send_telegram_exel(date_from, date_to, date_range)
 
 if __name__ == "__main__":
     # get_tokens()
