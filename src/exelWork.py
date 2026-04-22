@@ -1,12 +1,13 @@
+import os
 import time
 
 import requests
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Alignment
 from openpyxl.utils import get_column_letter
-from app import load_events_for_user
+from amoCRMWork import load_events_for_user
 from calculate import calculate_lead_stats, calculate_stats_for_manager, calculate_stats_for_telemarketer
-from config import TELEGRAM_DOMEN, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, PARENT_DIR, os
+from config import TELEGRAM_DOMEN, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, PARENT_DIR
 from data import MANAGERS, TELEMARKETERS
 
 BASE_DATA = {
