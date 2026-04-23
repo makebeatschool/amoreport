@@ -23,6 +23,7 @@ def calculate_lead_stats(events):
         'unique_call_dates': set(),
         'soglasiye': False,
         'doshlo': False,
+        'lead_id':None
     })
     for event in events:
         event_type = event.get('type')
@@ -39,7 +40,7 @@ def calculate_lead_stats(events):
             value_after = event.get('value_after')
             if value_after:
                 after_id = value_after.get('status_id')
-                contact_id = event.get('entity_id')
+                contact_id = event.get('object', {}).get('id')
                 if not contact_id:
                     continue
                 if after_id == 79428030:
@@ -205,7 +206,7 @@ def calculate_stats_for_telemarketer(events, contact_stats):
             value_after = event.get('value_after')
             if value_after:
                 after_id = value_after.get('status_id')
-                contact_id = event.get('entity_id')
+                contact_id = event.get('object', {}).get('id')
                 if after_id == 79428394:
                     stats['refusals'] += 1
                 elif after_id == 79428390:
@@ -236,20 +237,40 @@ def calculate_stats_for_telemarketer(events, contact_stats):
                     if contact_id:
                         contact_id = int(contact_id)
                         stats['added_group_contacts'].add(contact_id)
+    # --- НОВЫЕ ---
     new_calls = stats['new_leads']['calls']
-    old_calls = stats['old_leads']['calls']
     new_dialogs = stats['new_leads']['dialogs']
+    new_sogl = stats['new_leads']['soglasiye']
+    new_doshlo = stats['new_leads']['doshlo']
+    # --- СТАРЫЕ ---
+    old_calls = stats['old_leads']['calls']
     old_dialogs = stats['old_leads']['dialogs']
-    stats['new_leads']['conversion_to_soglasiye'] = round(stats['new_leads']['soglasiye'] / new_calls * 100, 1) if new_calls > 0 else 0
-    stats['old_leads']['conversion_to_soglasiye'] = round(stats['old_leads']['soglasiye'] / old_calls * 100, 1) if old_calls > 0 else 0
-    stats['new_leads']['conversion_to_dialogs'] = round(new_dialogs / new_calls * 100, 1) if new_calls > 0 else 0
-    stats['old_leads']['conversion_to_dialogs'] = round(old_dialogs / old_calls * 100, 1) if old_calls > 0 else 0
-    new_unique = len(stats['new_leads']['unique_dialogs'])
-    old_unique = len(stats['old_leads']['unique_dialogs'])
-    stats['new_leads']['conversion_from_dialogs'] = round(new_unique / new_dialogs * 100, 1) if new_dialogs > 0 else 0
-    stats['old_leads']['conversion_from_dialogs'] = round(old_unique / old_dialogs * 100, 1) if old_dialogs > 0 else 0
-    stats['new_leads']['unique_dialogs_count'] = new_unique
-    stats['old_leads']['unique_dialogs_count'] = old_unique
+    old_sogl = stats['old_leads']['soglasiye']
+    old_doshlo = stats['old_leads']['doshlo']
+    # --- КОНВЕРСИИ НОВЫЕ ---
+    stats['new_leads']['conv_call_to_dialog'] = round(new_dialogs / new_calls * 100, 1) if new_calls else 0
+    stats['new_leads']['conv_dialog_to_sogl'] = round(new_sogl / new_dialogs * 100, 1) if new_dialogs else 0
+    stats['new_leads']['conv_dialog_to_doshlo'] = round(new_doshlo / new_dialogs * 100, 1) if new_dialogs else 0
+    stats['new_leads']['conv_sogl_to_doshlo'] = round(new_doshlo / new_sogl * 100, 1) if new_sogl else 0
+    # --- КОНВЕРСИИ СТАРЫЕ ---
+    stats['old_leads']['conv_call_to_dialog'] = round(old_dialogs / old_calls * 100, 1) if old_calls else 0
+    stats['old_leads']['conv_dialog_to_sogl'] = round(old_sogl / old_dialogs * 100, 1) if old_dialogs else 0
+    stats['old_leads']['conv_dialog_to_doshlo'] = round(old_doshlo / old_dialogs * 100, 1) if old_dialogs else 0
+    stats['old_leads']['conv_sogl_to_doshlo'] = round(old_doshlo / old_sogl * 100, 1) if old_sogl else 0
+    # --- ОБЩИЕ ---
+    total_calls = stats['total_calls']
+    total_dialogs = stats['answered']
+    total_sogl = stats['soglasiy_na_probnoe']
+    total_doshlo = stats['doshlo_do_probnika']
+
+    stats['conv_call_to_dialog'] = round(total_dialogs / total_calls * 100, 1) if total_calls else 0
+    stats['conv_dialog_to_sogl'] = round(total_sogl / total_dialogs * 100, 1) if total_dialogs else 0
+    stats['conv_dialog_to_doshlo'] = round(total_doshlo / total_dialogs * 100, 1) if total_dialogs else 0
+    stats['conv_sogl_to_doshlo'] = round(total_doshlo / total_sogl * 100, 1) if total_sogl else 0
+    # --- уникальные ---
+    stats['new_leads']['unique_dialogs_count'] = len(stats['new_leads']['unique_dialogs'])
+    stats['old_leads']['unique_dialogs_count'] = len(stats['old_leads']['unique_dialogs'])
+
     stats['added_group'] = len(stats['added_group_contacts'])
     return stats
 

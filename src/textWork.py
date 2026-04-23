@@ -86,9 +86,10 @@ def format_telemarketer_report(stats, name, date_range):
     report.append("🎯 РЕЗУЛЬТАТЫ")
     report.append(f"👥 Добавлены в группу: {len(stats['added_group_contacts'])}")
     report.append("")
-    report.append(f"📈 Конверсия в согласие: {new['conversion_to_soglasiye']}%")
-    report.append(f"📈 Конверсия в дозвон: {new['conversion_to_dialogs']}%")
-    report.append(f"📈 Конверсия диалогов: {new['conversion_from_dialogs']}%")
+    report.append(f"📈 Конверсия в согласие: {new['conv_call_to_dialog']}%")
+    report.append(f"📈 Конверсия в дозвон: {new['conv_dialog_to_sogl']}%")
+    report.append(f"📈 Конверсия из диалогов в пробник: {new['conv_dialog_to_doshlo']}%")
+    report.append(f"📈 Конверсия из согласия в пробник: {new['conv_sogl_to_doshlo']}%")
     report.append("")
     old = stats['old_leads']
     report.append("🔴 СТАРЫЕ ЛИДЫ (≥4 звонков)")
@@ -100,9 +101,10 @@ def format_telemarketer_report(stats, name, date_range):
     report.append(f"✅ Согласий: {old['soglasiye']}")
     report.append(f"🎓 Дошло до пробника: {old['doshlo']}")
     report.append("")
-    report.append(f"📈 Конверсия в согласие: {old['conversion_to_soglasiye']}%")
-    report.append(f"📈 Конверсия в дозвон: {old['conversion_to_dialogs']}%")
-    report.append(f"📈 Конверсия диалогов: {old['conversion_from_dialogs']}%")
+    report.append(f"📈 Конверсия в согласие: {old['conv_call_to_dialog']}%")
+    report.append(f"📈 Конверсия в дозвон: {old['conv_dialog_to_sogl']}%")
+    report.append(f"📈 Конверсия из диалогов в пробник: {old['conv_dialog_to_doshlo']}%")
+    report.append(f"📈 Конверсия из согласия в пробник: {old['conv_sogl_to_doshlo']}%")
     return '\n'.join(report)
 
 def send_telegram_message(text):
