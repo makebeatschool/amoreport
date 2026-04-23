@@ -58,7 +58,7 @@ def calculate_stats_for_manager(events, contact_stats):
         'dialogs_25s': 0, 'unique_contacts': set(),
         'oma': 0, 'soma': 0, 'soga': 0, 'oga': 0,
         'refusals': 0, 'refusals_after_trial': 0, 'thinking': 0,
-        'cancel_after_first_payment':0,
+        'cancel_after_first_payment':0, 'refusal_after_trial':0, 'failure_after_secondary':0,
         'new_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
         'old_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
     }
@@ -121,12 +121,15 @@ def calculate_stats_for_manager(events, contact_stats):
                     stats['soga'] += 1
                 elif after_id == 79428394:
                     stats['refusals'] += 1
-                elif after_id == 84056278:
-                    stats['refusals_after_trial'] += 1
                 elif after_id == 79428390:
                     stats['thinking'] += 1
                 elif after_id == 84757154:
                     stats["cancel_after_first_payment"] += 1
+                elif after_id == 84056278:
+                    stats["refusal_after_trial"] += 1
+                # нету ни одной записи не могу посмотреть ид(когда будет надо будет поменять)
+                # elif after_id == 84056278:
+                #     stats["failure_after_secondary"] += 1
     new_calls = stats['new_leads']['calls']
     old_calls = stats['old_leads']['calls']
     new_dialogs = stats['new_leads']['dialogs']

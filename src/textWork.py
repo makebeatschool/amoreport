@@ -27,6 +27,8 @@ def format_manager_report(stats, name, date_range):
     report.append("")
     report.append(f"❌ Отказы: {stats['refusals']}")
     report.append(f"❌ Отказы после первой оплаты: {stats['cancel_after_first_payment']}")
+    report.append(f"❌ Отказ после вторичного продления: {stats['failure_after_secondary']}")
+    report.append(f"❌ Отказ после пробного: {stats['refusal_after_trial']}")
     report.append(f"⏳ Думают: {stats['thinking']}")
     report.append("")
     new = stats['new_leads']
