@@ -56,8 +56,8 @@ def calculate_stats_for_manager(events, contact_stats):
         'cancel_after_first_payment':0, 'refusal_after_trial':0, 'failure_after_secondary':0,
         'new_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
         'old_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
-        'payments_primary':{'oma': 0,'opa': 0,'oga': 0}, 
-        'payments_repeat':{'oma': 0,'opa': 0,'oga': 0}, 
+        'payments_primary':{'oma': 0,'opa': 0,'oga': 0, "soma": 0}, 
+        'payments_repeat':{'oma': 0,'opa': 0,'oga': 0, "soma": 0}, 
     }
     lead_category = {
         cid: 'new' if c['calls'] <= NEW_LEAD_MAX_CALLS else 'old'
@@ -110,22 +110,22 @@ def calculate_stats_for_manager(events, contact_stats):
                 after_id = value_after.get('status_id')
                 if after_id == 79428378:
                     stats['oma'] += 1
-                    if category == 'new':
-                        stats['payments_primary']['oma'] += 1
-                    else:
-                        stats['payments_repeat']['oma'] += 1
+                    # if category == 'new':
+                    #     stats['payments_primary']['oma'] += 1
+                    # else:
+                    #     stats['payments_repeat']['oma'] += 1
                 elif after_id == 79428042: 
                     stats['soma'] += 1
                     if category == 'new':
-                        stats['payments_primary']['oma'] += 1
+                        stats['payments_primary']['soma'] += 1
                     else:
-                        stats['payments_repeat']['oma'] += 1
+                        stats['payments_repeat']['soma'] += 1
                 elif after_id == 79428374: 
                     stats['soga'] += 1
-                    if category == 'new':
-                        stats['payments_primary']['oga'] += 1
-                    else:
-                        stats['payments_repeat']['oga'] += 1
+                    # if category == 'new':
+                    #     stats['payments_primary']['oga'] += 1
+                    # else:
+                    #     stats['payments_repeat']['oga'] += 1
                 elif after_id == 79428394:
                     stats['refusals'] += 1
                 elif after_id == 79428390:

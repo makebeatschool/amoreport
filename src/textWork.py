@@ -28,11 +28,11 @@ def format_manager_report(stats, name, date_range):
 
     report.append("💰 ОПЛАТЫ")
     report.append("🟢 Первичные:")
-    report.append(f"🎯  ОМА: {stats['payments_primary']['oma']}")
+    report.append(f"🎯  ОМА: {stats['oma']}")
     report.append(f"🎯  ОГА: {stats['payments_primary']['oga']}")
     report.append("🔴 Повторные:")
-    report.append(f"🎯  ОМА: {stats['payments_repeat']['oma']}")
-    report.append(f"🎯  ОГА: {stats['payments_repeat']['oga']}")
+    report.append(f"🎯  ОМА: {stats['payments_repeat']['soma']}")
+    report.append(f"🎯  ОГА: {stats['soga']}")
 
     report.append("")
     report.append(f"❌ Отказы: {stats['refusals']}")
@@ -208,8 +208,8 @@ def send_telegram_text(date_from, date_to, date_range):
     sent, failed =send_report(date_from, date_to, date_range, MANAGERS, 
                 calculate_stats_for_manager, format_manager_report, 0, 0)
     print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
-    sent, failed =send_report(date_from, date_to, date_range, TELEMARKETERS, 
-                calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
+    # sent, failed =send_report(date_from, date_to, date_range, TELEMARKETERS, 
+    #             calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
 
     print(f"\n{'='*60}")
     print(f"✅ Отправлено: {sent}")
