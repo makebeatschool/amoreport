@@ -25,6 +25,16 @@ def format_manager_report(stats, name, date_range):
     report.append(f"🎯 СОГА: {stats['soga']}")
     report.append(f"🎯 ОГА: {stats['oga']}")
     report.append("")
+
+    report.append("💰 ОПЛАТЫ")
+    report.append("🟢 Первичные:")
+    report.append(f"🎯  ОМА: {stats['payments_primary']['oma']}")
+    report.append(f"🎯  ОГА: {stats['payments_primary']['oga']}")
+    report.append("🔴 Повторные:")
+    report.append(f"🎯  ОМА: {stats['payments_repeat']['oma']}")
+    report.append(f"🎯  ОГА: {stats['payments_repeat']['oga']}")
+
+    report.append("")
     report.append(f"❌ Отказы: {stats['refusals']}")
     report.append(f"❌ Отказы после первой оплаты: {stats['cancel_after_first_payment']}")
     report.append(f"❌ Отказ после вторичного продления: {stats['failure_after_secondary']}")
@@ -88,7 +98,7 @@ def format_telemarketer_report(stats, name, date_range):
     report.append("🎯 РЕЗУЛЬТАТЫ")
     report.append(f"👥 Добавлены в группу: {len(stats['added_group_contacts'])}")
     report.append("")
-    report.append(f"📈 Конверсия в согласие: {new['conv_call_to_dialog']}%")
+    report.append(f"📈 Конверсия в согласие: {new['conv_soglasie_to_dialog']}%")
     report.append(f"📈 Конверсия в дозвон: {new['conv_dialog_to_sogl']}%")
     report.append(f"📈 Конверсия из диалогов в пробник: {new['conv_dialog_to_doshlo']}%")
     report.append(f"📈 Конверсия из согласия в пробник: {new['conv_sogl_to_doshlo']}%")
@@ -103,7 +113,7 @@ def format_telemarketer_report(stats, name, date_range):
     report.append(f"✅ Согласий: {old['soglasiye']}")
     report.append(f"🎓 Дошло до пробника: {old['doshlo']}")
     report.append("")
-    report.append(f"📈 Конверсия в согласие: {old['conv_call_to_dialog']}%")
+    report.append(f"📈 Конверсия в согласие: {old['conv_soglasie_to_dialog']}%")
     report.append(f"📈 Конверсия в дозвон: {old['conv_dialog_to_sogl']}%")
     report.append(f"📈 Конверсия из диалогов в пробник: {old['conv_dialog_to_doshlo']}%")
     report.append(f"📈 Конверсия из согласия в пробник: {old['conv_sogl_to_doshlo']}%")
@@ -194,13 +204,13 @@ def send_telegram_text(date_from, date_to, date_range):
     print(f"📨 Отправка в Telegram...")
     print(f"{'='*60}\n")
     print("👔 МЕНЕДЖЕРЫ:")
-    # send_manager_report(date_from, date_to, date_range)
+
     sent, failed =send_report(date_from, date_to, date_range, MANAGERS, 
                 calculate_stats_for_manager, format_manager_report, 0, 0)
     print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
     sent, failed =send_report(date_from, date_to, date_range, TELEMARKETERS, 
                 calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
-    # send_telemarketolog_report(date_from, date_to, date_range)
+
     print(f"\n{'='*60}")
     print(f"✅ Отправлено: {sent}")
     print(f"❌ Не отправлено: {failed}")

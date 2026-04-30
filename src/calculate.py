@@ -1,7 +1,6 @@
 from collections import defaultdict
 from config import CALL_SHORT_MAX, CALL_MEDIUM_MAX, UNIQUE_DIALOG_MIN_DURATION, NEW_LEAD_MAX_CALLS
 
-
 def extract_duration_and_contact(event):
     """Извлекает длительность и contact_id"""
     value_after = event.get('value_after')
@@ -18,18 +17,14 @@ def extract_duration_and_contact(event):
 def calculate_lead_stats(events):
     """Рассчитывает статистику по лидам"""
     contact_stats = defaultdict(lambda: {
-        'calls': 0,
-        'dialogs': 0,
+        'calls': 0, 'dialogs': 0,
         'unique_call_dates': set(),
-        'soglasiye': False,
-        'doshlo': False,
+        'soglasiye': False, 'doshlo': False,
         'lead_id':None
     })
     for event in events:
         event_type = event.get('type')
         if event_type in (17, 30):
-            if event.get('value_after', {}).get('name') == "отказ после 1 оплаты":
-                print("all")
             duration, contact_id = extract_duration_and_contact(event)
             if not contact_id:
                 continue
@@ -61,16 +56,16 @@ def calculate_stats_for_manager(events, contact_stats):
         'cancel_after_first_payment':0, 'refusal_after_trial':0, 'failure_after_secondary':0,
         'new_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
         'old_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
+        'payments_primary':{'oma': 0,'opa': 0,'oga': 0}, 
+        'payments_repeat':{'oma': 0,'opa': 0,'oga': 0}, 
     }
-    lead_category = {}
-    for contact_id, cstats in contact_stats.items():
-        total_calls = cstats['calls']
-        lead_category[contact_id] = 'new' if total_calls <= NEW_LEAD_MAX_CALLS else 'old'
+    lead_category = {
+        cid: 'new' if c['calls'] <= NEW_LEAD_MAX_CALLS else 'old'
+        for cid, c in contact_stats.items()
+    }
     for event in events:
         event_type = event.get('type')
         if event_type in (17, 30):
-            if event.get('value_after', {}).get('name') == "отказ после 1 оплаты":
-                print("manager")
             duration, contact_id = extract_duration_and_contact(event)
             is_outgoing = (event_type == 30)
             stats['total_calls'] += 1
@@ -115,10 +110,22 @@ def calculate_stats_for_manager(events, contact_stats):
                 after_id = value_after.get('status_id')
                 if after_id == 79428378:
                     stats['oma'] += 1
-                elif after_id == 79428042:
+                    if category == 'new':
+                        stats['payments_primary']['oma'] += 1
+                    else:
+                        stats['payments_repeat']['oma'] += 1
+                elif after_id == 79428042: 
                     stats['soma'] += 1
-                elif after_id == 79428374:
+                    if category == 'new':
+                        stats['payments_primary']['oma'] += 1
+                    else:
+                        stats['payments_repeat']['oma'] += 1
+                elif after_id == 79428374: 
                     stats['soga'] += 1
+                    if category == 'new':
+                        stats['payments_primary']['oga'] += 1
+                    else:
+                        stats['payments_repeat']['oga'] += 1
                 elif after_id == 79428394:
                     stats['refusals'] += 1
                 elif after_id == 79428390:
@@ -245,18 +252,26 @@ def calculate_stats_for_telemarketer(events, contact_stats):
     new_dialogs = stats['new_leads']['dialogs']
     new_sogl = stats['new_leads']['soglasiye']
     new_doshlo = stats['new_leads']['doshlo']
+    stats['new_leads']['unique_dialogs_count'] = len(stats['new_leads']['unique_dialogs'])
     # --- СТАРЫЕ ---
     old_calls = stats['old_leads']['calls']
     old_dialogs = stats['old_leads']['dialogs']
     old_sogl = stats['old_leads']['soglasiye']
     old_doshlo = stats['old_leads']['doshlo']
+    stats['old_leads']['unique_dialogs_count'] = len(stats['old_leads']['unique_dialogs'])
     # --- КОНВЕРСИИ НОВЫЕ ---
-    stats['new_leads']['conv_call_to_dialog'] = round(new_dialogs / new_calls * 100, 1) if new_calls else 0
+    try:
+        stats['new_leads']['conv_soglasie_to_dialog'] = round(new_sogl / stats['new_leads']['unique_dialogs_count']  * 100, 1) if new_calls else 0
+    except ZeroDivisionError:
+        stats['new_leads']['conv_soglasie_to_dialog'] = 0
     stats['new_leads']['conv_dialog_to_sogl'] = round(new_sogl / new_dialogs * 100, 1) if new_dialogs else 0
     stats['new_leads']['conv_dialog_to_doshlo'] = round(new_doshlo / new_dialogs * 100, 1) if new_dialogs else 0
     stats['new_leads']['conv_sogl_to_doshlo'] = round(new_doshlo / new_sogl * 100, 1) if new_sogl else 0
     # --- КОНВЕРСИИ СТАРЫЕ ---
-    stats['old_leads']['conv_call_to_dialog'] = round(old_dialogs / old_calls * 100, 1) if old_calls else 0
+    try:
+        stats['old_leads']['conv_soglasie_to_dialog'] = round(old_sogl / stats['old_leads']['unique_dialogs_count'] * 100, 1) if old_calls else 0
+    except ZeroDivisionError:
+        stats['old_leads']['conv_soglasie_to_dialog'] = 0
     stats['old_leads']['conv_dialog_to_sogl'] = round(old_sogl / old_dialogs * 100, 1) if old_dialogs else 0
     stats['old_leads']['conv_dialog_to_doshlo'] = round(old_doshlo / old_dialogs * 100, 1) if old_dialogs else 0
     stats['old_leads']['conv_sogl_to_doshlo'] = round(old_doshlo / old_sogl * 100, 1) if old_sogl else 0
@@ -270,9 +285,6 @@ def calculate_stats_for_telemarketer(events, contact_stats):
     stats['conv_dialog_to_sogl'] = round(total_sogl / total_dialogs * 100, 1) if total_dialogs else 0
     stats['conv_dialog_to_doshlo'] = round(total_doshlo / total_dialogs * 100, 1) if total_dialogs else 0
     stats['conv_sogl_to_doshlo'] = round(total_doshlo / total_sogl * 100, 1) if total_sogl else 0
-    # --- уникальные ---
-    stats['new_leads']['unique_dialogs_count'] = len(stats['new_leads']['unique_dialogs'])
-    stats['old_leads']['unique_dialogs_count'] = len(stats['old_leads']['unique_dialogs'])
 
     stats['added_group'] = len(stats['added_group_contacts'])
     return stats
