@@ -168,6 +168,7 @@ def calculate_stats_for_telemarketer(events, contact_stats):
                       'soglasiye': 0, 'doshlo': 0, 'dialogs_25s': 0},
     }
     lead_category = {}
+    seen_people = set()
     for contact_id, cstats in contact_stats.items():
         total_calls = cstats['calls']
         lead_category[contact_id] = 'new' if total_calls <= NEW_LEAD_MAX_CALLS else 'old'
@@ -222,7 +223,12 @@ def calculate_stats_for_telemarketer(events, contact_stats):
                 elif after_id == 79428390:
                     stats['thinking'] += 1
                 elif after_id == 79428030:
-                    stats['soglasiy_na_probnoe'] += 1
+                    if contact_id not in seen_people:
+                        seen_people.add(contact_id)
+                        stats['soglasiy_na_probnoe'] += 1
+                    else:
+                        print("gg")
+                    # stats['soglasiy_na_probnoe'] += 1
                     if contact_id and contact_id in lead_category:
                         if lead_category[contact_id] == 'new':
                             stats['new_leads']['soglasiye'] += 1

@@ -1,6 +1,7 @@
 import sys
 from datetime import datetime
 # from exelWork import send_telegram_exel
+from phone_otchet import send_report_calls
 from textWork import send_telegram_text
 from tokenWork import refresh_token
 
@@ -39,3 +40,4 @@ if __name__ == "__main__":
     # get_tokens()
     refresh_token()
     main()
+    send_report_calls()
