@@ -40,4 +40,4 @@ if __name__ == "__main__":
     # get_tokens()
     refresh_token()
     main()
-    send_report_calls()
+    # send_report_calls()

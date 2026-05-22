@@ -116,10 +116,10 @@ def calculate_stats_for_manager(events, contact_stats):
                     #     stats['payments_repeat']['oma'] += 1
                 elif after_id == 79428042: 
                     stats['soma'] += 1
-                    if category == 'new':
-                        stats['payments_primary']['soma'] += 1
-                    else:
-                        stats['payments_repeat']['soma'] += 1
+                    # if category == 'new':
+                    #     stats['payments_primary']['soma'] += 1
+                    # else:
+                    #     stats['payments_repeat']['soma'] += 1
                 elif after_id == 79428374: 
                     stats['soga'] += 1
                     # if category == 'new':

@@ -27,17 +27,18 @@ def to_str(sec):
 def open_site(login, password, date=None):
     # Даты пока не используем, как и в исходном коде
     p = sync_playwright().start()
-    browser = p.chromium.launch(headless=True)
+    browser = p.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
-    page.goto("https://go.uiscom.ru/login", wait_until="domcontentloaded")
-    page.locator('input[name="login"]').fill(login)
-    page.locator('input[name="password"]').fill(password)
-    page.locator('button[type="submit"]').click()
-    page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(8000)
-    page.goto("https://go.uiscom.ru/reports/calls/2300492", wait_until="domcontentloaded")
-    page.wait_for_timeout(10000)
+    page.goto("https://go.uiscom.ru/login")
+    page.fill('input[name="login"]', login)
+    page.fill('input[name="password"]', password)
+    page.click('button[type="submit"]')
+    page.wait_for_selector('input[name="login"]', state="detached", timeout=15000)
+    page.goto("https://go.uiscom.ru/reports/calls/2300492")
+    page.wait_for_selector("table tbody tr", timeout=20000)
+    page.wait_for_timeout(2000)
+    print("сайт открылся")
     return p, browser, context, page
 
 def get_result(login, password, date=None):
