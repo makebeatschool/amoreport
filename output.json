@@ -1,0 +1,210 @@
+[
+  {
+    "id": "01kqg0nxnwct23j75rfgq7hqen",
+    "date_create": "30.04.2026 23:18",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 53722199,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/53722199",
+      "entity_name": "Сделка #53722199",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #53722199",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqg0jnwwq5h4w9dts5q7tsx0",
+    "date_create": "30.04.2026 23:16",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 52811429,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/52811429",
+      "entity_name": "Сделка #52811429",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #52811429",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqg0hyaqw8g3p0s0kn8ykjqj",
+    "date_create": "30.04.2026 23:16",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 44972117,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/44972117",
+      "entity_name": "Сделка #44972117",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #44972117",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqfepd7ch6bwha60xg0ejqjj",
+    "date_create": "30.04.2026 18:04",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 50549015,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/50549015",
+      "entity_name": "Сделка #50549015",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #50549015",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqf7d894khs1py4ds3hm6w4n",
+    "date_create": "30.04.2026 15:56",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 54547577,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/54547577",
+      "entity_name": "Сделка #54547577",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #54547577",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqf3eddqy2whqq8r6y02abze",
+    "date_create": "30.04.2026 14:47",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 53614537,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/53614537",
+      "entity_name": "Сделка #53614537",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #53614537",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqey199t7n2t1ph01zvan7bk",
+    "date_create": "30.04.2026 13:13",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 54113847,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/54113847",
+      "entity_name": "Сделка #54113847",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #54113847",
+    "event": "Изменение этапа продажи"
+  },
+  {
+    "id": "01kqeqxmkahrh4gm042q6qzrga",
+    "date_create": "30.04.2026 11:26",
+    "author": "Дмитрий Черемисов",
+    "object": {
+      "id": 54475539,
+      "name": "Сделка",
+      "entity": "leads",
+      "url": "/leads/detail/54475539",
+      "entity_name": "Сделка #54475539",
+      "loss_reason_id": 0
+    },
+    "value_before": {
+      "color": "#ffcccc",
+      "name": "СОМА",
+      "status_id": 79428042
+    },
+    "value_after": {
+      "color": "#99ccff",
+      "name": "Ома",
+      "status_id": 79428378
+    },
+    "type": 14,
+    "name": "Сделка #54475539",
+    "event": "Изменение этапа продажи"
+  }
+]

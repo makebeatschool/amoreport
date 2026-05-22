@@ -3,7 +3,7 @@ from datetime import datetime
 # from exelWork import send_telegram_exel
 from phone_otchet import send_report_calls
 from textWork import send_telegram_text
-from tokenWork import refresh_token
+# from tokenWork import refresh_token
 
 def extractionDate(args):
     args = sys.argv[1:]
@@ -38,6 +38,6 @@ def main():
 
 if __name__ == "__main__":
     # get_tokens()
-    refresh_token()
+    # refresh_token()
     main()
     # send_report_calls()

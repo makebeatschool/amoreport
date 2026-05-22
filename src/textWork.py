@@ -1,3 +1,5 @@
+import datetime
+import json
 import time
 import requests
 from amoCRMWork import load_events_for_user
@@ -26,13 +28,13 @@ def format_manager_report(stats, name, date_range):
     report.append(f"🎯 ОГА: {stats['oga']}")
     report.append("")
 
-    report.append("💰 ОПЛАТЫ (в разработке)")
+    report.append("💰 ОПЛАТЫ")
     report.append("🟢 Первичные:")
-    report.append(f"🎯  ОМА: {stats['oma']}")
-    report.append(f"🎯  ОГА: 0")
+    report.append(f"🎯  ОМА: {stats['payments_primary']['oma']}")
+    report.append(f"🎯  ОГА:  {stats['payments_primary']['oga']}")
     report.append("🔴 Повторные:")
-    report.append(f"🎯  ОМА: -")
-    report.append(f"🎯  ОГА: 0")
+    report.append(f"🎯  ОМА: {stats['payments_repeat']['oma']}")
+    report.append(f"🎯  ОГА: {stats['payments_repeat']['oga']}")
 
     report.append("")
     report.append(f"❌ Отказы: {stats['refusals']}")
@@ -185,7 +187,6 @@ def send_report(date_from, date_to, date_range, employers, calul_func, format_fu
         user_name = emp['name']
         print(f"  📌 {user_name}...")
         events = load_events_for_user(user_id, date_from, date_to, max_pages=10)
-        # print(type(events), len(events))
         if not events:
             print(f"    ⚠️ Нет событий, пропускаем")
             failed += 1

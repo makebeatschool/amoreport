@@ -1,14 +1,14 @@
 import time
 import requests
-from config import headers
-from tokenWork import load_token
+from config import headers, long_token
+# from tokenWork import load_token
 
 
 def load_events_for_user(user_id, date_from, date_to, max_pages=20):
     """Загружает все события для пользователя"""
     all_events = []
     page = 1
-    access_token = load_token()
+    # access_token = load_token()
     while page <= max_pages:
         data = {
             'filter[main_user][]': user_id,
@@ -21,7 +21,7 @@ def load_events_for_user(user_id, date_from, date_to, max_pages=20):
         try:
             response = requests.post(
                 'https://makebeatschool.amocrm.ru/ajax/events/list/',
-                cookies={"access_token":access_token},
+                cookies={"access_token":long_token},
                 headers=headers,
                 data=data,
                 timeout=30

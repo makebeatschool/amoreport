@@ -1,5 +1,12 @@
 from collections import defaultdict
-from config import CALL_SHORT_MAX, CALL_MEDIUM_MAX, UNIQUE_DIALOG_MIN_DURATION, NEW_LEAD_MAX_CALLS
+
+import requests
+from config import BASE_DOMAIN, long_token, CALL_SHORT_MAX, CALL_MEDIUM_MAX, UNIQUE_DIALOG_MIN_DURATION, NEW_LEAD_MAX_CALLS
+
+headers = {   
+    "Authorization": f"Bearer {long_token}", 
+    "Content-Type": "application/json"
+    }
 
 def extract_duration_and_contact(event):
     """Извлекает длительность и contact_id"""
@@ -44,6 +51,18 @@ def calculate_lead_stats(events):
                     contact_stats[contact_id]['doshlo'] = True
     return contact_stats
 
+def lead_had_oma_before(lead_id, id_event):
+    r = requests.get(f"{BASE_DOMAIN}/api/v4/events", headers=headers, params={"limit":100,"filter[entity]":"lead","filter[entity_id][]":lead_id}, timeout=30)
+    items = r.json().get("_embedded", {}).get("events", [])
+    oma_count = 0
+    for ev in items:
+        value_after = ev.get("value_after", [])
+        if value_after:
+            if value_after[0].get("lead_status", {}).get("id") == id_event:
+                oma_count+=1
+                if oma_count>1:return True
+    return False
+
 def calculate_stats_for_manager(events, contact_stats):
     """Рассчитывает статистику для менеджера"""
     stats = {
@@ -56,8 +75,8 @@ def calculate_stats_for_manager(events, contact_stats):
         'cancel_after_first_payment':0, 'refusal_after_trial':0, 'failure_after_secondary':0,
         'new_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
         'old_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
-        'payments_primary':{'oma': 0,'opa': 0,'oga': 0, "soma": 0}, 
-        'payments_repeat':{'oma': 0,'opa': 0,'oga': 0, "soma": 0}, 
+        'payments_primary':{'oma': 0,'oga': 0,}, 
+        'payments_repeat':{'oma': 0,'oga': 0,}, 
     }
     lead_category = {
         cid: 'new' if c['calls'] <= NEW_LEAD_MAX_CALLS else 'old'
@@ -110,22 +129,19 @@ def calculate_stats_for_manager(events, contact_stats):
                 after_id = value_after.get('status_id')
                 if after_id == 79428378:
                     stats['oma'] += 1
-                    # if category == 'new':
-                    #     stats['payments_primary']['oma'] += 1
-                    # else:
-                    #     stats['payments_repeat']['oma'] += 1
+                    if lead_had_oma_before(event.get("object", {}).get("id"), 79428378):
+                        stats['payments_repeat']['oma'] += 1
+                    else:
+                        stats['payments_primary']['oma'] += 1
+                elif after_id == 79428382:
+                    if lead_had_oma_before(event.get("object", {}).get("id"), 79428382):
+                        stats['payments_repeat']['oga'] += 1
+                    else:
+                        stats['payments_primary']['oga'] += 1
                 elif after_id == 79428042: 
                     stats['soma'] += 1
-                    # if category == 'new':
-                    #     stats['payments_primary']['soma'] += 1
-                    # else:
-                    #     stats['payments_repeat']['soma'] += 1
                 elif after_id == 79428374: 
                     stats['soga'] += 1
-                    # if category == 'new':
-                    #     stats['payments_primary']['oga'] += 1
-                    # else:
-                    #     stats['payments_repeat']['oga'] += 1
                 elif after_id == 79428394:
                     stats['refusals'] += 1
                 elif after_id == 79428390:
@@ -134,9 +150,6 @@ def calculate_stats_for_manager(events, contact_stats):
                     stats["cancel_after_first_payment"] += 1
                 elif after_id == 84056278:
                     stats["refusal_after_trial"] += 1
-                # нету ни одной записи не могу посмотреть ид(когда будет надо будет поменять)
-                # elif after_id == 84056278:
-                #     stats["failure_after_secondary"] += 1
     new_calls = stats['new_leads']['calls']
     old_calls = stats['old_leads']['calls']
     new_dialogs = stats['new_leads']['dialogs']
