@@ -7,7 +7,8 @@ from openpyxl.styles import PatternFill, Alignment
 from openpyxl.utils import get_column_letter
 from amoCRMWork import load_events_for_user
 from calculate import calculate_lead_stats, calculate_stats_for_manager, calculate_stats_for_telemarketer
-from config import TELEGRAM_DOMEN, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, PARENT_DIR
+from config import TELEGRAM_DOMEN, PARENT_DIR
+from env import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from data import MANAGERS, TELEMARKETERS
 
 BASE_DATA = {

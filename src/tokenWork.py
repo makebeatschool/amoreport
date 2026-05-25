@@ -1,7 +1,8 @@
 import os
 import json
 import requests
-from config import DEF_FILE, BASE_DOMAIN, CLIENT_ID, CLIENT_SECRET, AUTH_CODE, REDIRECT_URL
+from config import DEF_FILE, BASE_DOMAIN, REDIRECT_URL
+from env import CLIENT_ID, CLIENT_SECRET, AUTH_CODE
 
 def load_token(type=0,  file_path=DEF_FILE):
     with open(file_path, 'r', encoding='utf-8') as f:

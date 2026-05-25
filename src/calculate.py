@@ -1,12 +1,8 @@
 from collections import defaultdict
 
 import requests
-from config import BASE_DOMAIN, long_token, CALL_SHORT_MAX, CALL_MEDIUM_MAX, UNIQUE_DIALOG_MIN_DURATION, NEW_LEAD_MAX_CALLS
-
-headers = {   
-    "Authorization": f"Bearer {long_token}", 
-    "Content-Type": "application/json"
-    }
+from config import BASE_DOMAIN, CALL_SHORT_MAX, CALL_MEDIUM_MAX, UNIQUE_DIALOG_MIN_DURATION, NEW_LEAD_MAX_CALLS
+from env import long_token
 
 def extract_duration_and_contact(event):
     """Извлекает длительность и contact_id"""
@@ -51,8 +47,13 @@ def calculate_lead_stats(events):
                     contact_stats[contact_id]['doshlo'] = True
     return contact_stats
 
+def return_headers_oma(long_token):
+    return {   
+        "Authorization": f"Bearer {long_token}", 
+        "Content-Type": "application/json"
+    }
 def lead_had_oma_before(lead_id, id_event):
-    r = requests.get(f"{BASE_DOMAIN}/api/v4/events", headers=headers, params={"limit":100,"filter[entity]":"lead","filter[entity_id][]":lead_id}, timeout=30)
+    r = requests.get(f"{BASE_DOMAIN}/api/v4/events", headers=return_headers_oma(long_token), params={"limit":100,"filter[entity]":"lead","filter[entity_id][]":lead_id}, timeout=30)
     items = r.json().get("_embedded", {}).get("events", [])
     oma_count = 0
     for ev in items:

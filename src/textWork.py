@@ -3,7 +3,8 @@ import time
 import requests
 from amoCRMWork import load_events_for_user
 from data import TELEMARKETERS, MANAGERS, MANAGERS23
-from config import  TELEGRAM_BOT_TOKEN, TELEGRAM_DOMEN, TELEGRAM_CHAT_ID
+from config import  TELEGRAM_DOMEN
+from env import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from calculate import calculate_stats_for_manager, calculate_stats_for_telemarketer, calculate_lead_stats
 
 

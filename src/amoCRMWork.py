@@ -1,6 +1,7 @@
 import time
 import requests
-from config import headers, long_token
+from config import headers
+from env import long_token
 # from tokenWork import load_token
 
 
