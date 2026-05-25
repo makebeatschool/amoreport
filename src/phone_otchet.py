@@ -1,25 +1,9 @@
 import requests
 from datetime import date as dt
 from collections import defaultdict
+from config import TELEGRAM_DOMEN, url_uis_report, headers_uis
+from env import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
-# date = "2026-05-23"
-TELEGRAM_DOMEN = "https://api.telegram.org"
-TELEGRAM_BOT_TOKEN="6283104932:AAGQrvcM8qI4_5DL0okJmKxQLIoVflWoVa0"
-TELEGRAM_CHAT_ID="1785513479"
-# TELEGRAM_BOT_TOKEN = "8078411503:AAEv6bx1rBg0yMDssgjbLRnFS8VE4YlV1mI"
-# TELEGRAM_CHAT_ID = "-1003812558799"
-
-login = "makebeatschool@gmail.com"
-password = "J8wdnRDa"
-
-url_uis_report = "https://uis-prod-msk-report-constructor-api.uiscom.ru/builder/report"
-headers_uis = {
-    "Content-Type": "application/json",
-    "Accept": "application/json, text/plain, */*",
-    "Origin": "https://go.uiscom.ru",
-    "Referer": "https://go.uiscom.ru/reports/calls/2300492",
-    "User-Agent": "Mozilla/5.0"
-}
 
 def generate_payload(date, limit=1000):
     return  {
@@ -60,7 +44,7 @@ def to_str(sec):
 
 def get_result_from_data(data):
     stats = defaultdict(lambda: {"total": 0, "talk": 0})
-    print(len(data['data']))
+    print("Количество записей:", len(data['data']))
     for item in data.get("data", []):
         employees = item.get("employees", [])
         if not employees: continue

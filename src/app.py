@@ -38,7 +38,11 @@ def main():
         return
     date_range = f"{date_from} - {date_to}" if date_from != date_to else date_from
     send_telegram_text(date_from, date_to, date_range)
-    send_report_calls(date_from_iso)
+    try:
+        print("Отправляем отчёт по звонкам...")
+        send_report_calls(date_from_iso)
+    except Exception as e:
+        print("Ошибка при отправке отчета по звонкам:", e)
     # send_telegram_exel(date_from, date_to, date_range)
 
 if __name__ == "__main__":

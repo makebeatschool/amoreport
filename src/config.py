@@ -23,6 +23,15 @@ headers = {
     'x-requested-with': 'XMLHttpRequest',
 }
 
+url_uis_report = "https://uis-prod-msk-report-constructor-api.uiscom.ru/builder/report"
+headers_uis = {
+    "Content-Type": "application/json",
+    "Accept": "application/json, text/plain, */*",
+    "Origin": "https://go.uiscom.ru",
+    "Referer": "https://go.uiscom.ru/reports/calls/2300492",
+    "User-Agent": "Mozilla/5.0"
+}
+
 
 # Константы
 CALL_SHORT_MAX = 10
