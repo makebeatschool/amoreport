@@ -1,9 +1,8 @@
-import datetime
-import json
+from datetime import datetime
 import time
 import requests
 from amoCRMWork import load_events_for_user
-from data import TELEMARKETERS, MANAGERS
+from data import TELEMARKETERS, MANAGERS, MANAGERS23
 from config import  TELEGRAM_BOT_TOKEN, TELEGRAM_DOMEN, TELEGRAM_CHAT_ID
 from calculate import calculate_stats_for_manager, calculate_stats_for_telemarketer, calculate_lead_stats
 
@@ -26,6 +25,8 @@ def format_manager_report(stats, name, date_range):
     report.append(f"🎯 СОМА: {stats['soma']}")
     report.append(f"🎯 СОГА: {stats['soga']}")
     report.append(f"🎯 ОГА: {stats['oga']}")
+    report.append(f"🎯 ОЛА: {stats['ola']}")
+    report.append(f"🎯 СОЛА: {stats['sola']}")
     report.append("")
 
     report.append("💰 ОПЛАТЫ")
@@ -205,14 +206,31 @@ def send_telegram_text(date_from, date_to, date_range):
     print(f"📊 ОТЧЁТ ЗА {date_range}")
     print(f"📨 Отправка в Telegram...")
     print(f"{'='*60}\n")
-    print("👔 МЕНЕДЖЕРЫ:")
 
-    sent, failed =send_report(date_from, date_to, date_range, MANAGERS, 
-                calculate_stats_for_manager, format_manager_report, 0, 0)
-    print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
-    sent, failed =send_report(date_from, date_to, date_range, TELEMARKETERS, 
-                calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
-
+    report_date = datetime.strptime(date_range, "%d.%m.%Y").date()
+    today = datetime.now().date()
+    current_hour = datetime.now().hour
+    if report_date == today and current_hour >= 23:
+        print("👔 МЕНЕДЖЕРЫ:")
+        sent, failed = send_report(date_from, date_to, date_range, MANAGERS23,
+                    calculate_stats_for_manager, format_manager_report, 0, 0)
+    elif report_date == today:
+        print("👔 МЕНЕДЖЕРЫ:")
+        sent, failed = send_report(date_from, date_to, date_range, MANAGERS,
+                    calculate_stats_for_manager, format_manager_report, 0, 0)
+        print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
+        sent, failed = send_report(date_from, date_to, date_range, TELEMARKETERS,
+                    calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
+    else:
+        print("👔 МЕНЕДЖЕРЫ:")
+        sent, failed = send_report(date_from, date_to, date_range, MANAGERS23,
+                    calculate_stats_for_manager, format_manager_report, 0, 0)
+        print("👔 МЕНЕДЖЕРЫ:")
+        sent, failed = send_report(date_from, date_to, date_range, MANAGERS,
+                    calculate_stats_for_manager, format_manager_report, sent, failed)
+        print("\n📞 ТЕЛЕМАРКЕТОЛОГИ:")
+        sent, failed = send_report(date_from, date_to, date_range, TELEMARKETERS,
+                    calculate_stats_for_telemarketer, format_telemarketer_report, sent, failed)
     print(f"\n{'='*60}")
     print(f"✅ Отправлено: {sent}")
     print(f"❌ Не отправлено: {failed}")

@@ -70,7 +70,7 @@ def calculate_stats_for_manager(events, contact_stats):
         'answered': 0, 'missed': 0,
         'short_calls': 0, 'medium_calls': 0, 'long_calls': 0,
         'dialogs_25s': 0, 'unique_contacts': set(),
-        'oma': 0, 'soma': 0, 'soga': 0, 'oga': 0,
+        'oma': 0, 'soma': 0, 'soga': 0, 'oga': 0, 'ola':0, 'sola':0,
         'refusals': 0, 'refusals_after_trial': 0, 'thinking': 0,
         'cancel_after_first_payment':0, 'refusal_after_trial':0, 'failure_after_secondary':0,
         'new_leads': {'calls': 0, 'dialogs': 0, 'unique_dialogs': set(), 'contacts': set(), 'dialogs_25s': 0},
@@ -142,6 +142,10 @@ def calculate_stats_for_manager(events, contact_stats):
                     stats['soma'] += 1
                 elif after_id == 79428374: 
                     stats['soga'] += 1
+                elif after_id == 86052682: 
+                    stats['ola'] += 1
+                elif after_id == 86052686: 
+                    stats['sola'] += 1   
                 elif after_id == 79428394:
                     stats['refusals'] += 1
                 elif after_id == 79428390:
