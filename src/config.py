@@ -11,8 +11,10 @@ REDIRECT_URL = "https://example.com"
 TELEGRAM_DOMEN = "https://api.telegram.org"
 
 # ======  prod  ====================
+# старый тг зеркало
 # TELEGRAM_DOMEN = "https://white-block-333b.nefarionys.workers.dev"
-
+# новый использовать этот 
+# TELEGRAM_DOMEN = "https://proud-wood-bec0.telemarketolog41.workers.dev/"
 headers = {
     'accept': 'application/json, text/javascript, */*; q=0.01',
     'accept-language': 'en-US,en;q=0.9',
